@@ -1,7 +1,10 @@
+var input = ["ITEM0013 x 4", "ITEM0022 x 1"];
+bestCharge(input);
 function bestCharge(selectedItems) {
   var input = parseInput(selectedItems);
   var soldFoodItems = getSoldFood(input);
-  console.log("============= 订餐明细 =============");
+  var originalTotalPrice = getOriginalTotalPrice(soldFoodItems);
+printEachFood(soldFoodItems);
 }
 
 function parseInput(selectedItems) {
@@ -37,23 +40,40 @@ function getPromotion(itemsToBePromoted, originalTotalPrice) {
   const promotionThreshold = 30;
   var allPromotions = loadPromotions();
   var hasPromotions = false;
-  var promotionType = '';
-  itemsToBePromoted.forEach(foodItem=>{
-    if(foodItem.id === allPromotions[1]['items'][0]){
-      itemsToBePromoted.forEach(foodItemInner=>{
-        if(foodItemInner.id === allPromotions[1]['items'][1]){
+  var promotionType = "";
+  itemsToBePromoted.forEach(foodItem => {
+    if (foodItem.id === allPromotions[1]["items"][0]) {
+      itemsToBePromoted.forEach(foodItemInner => {
+        if (foodItemInner.id === allPromotions[1]["items"][1]) {
           hasPromotions = true;
         }
-      })
+      });
     }
-  })
+  });
   if (originalTotalPrice > promotionThreshold) {
     hasPromotions = true;
-    promotionType = allPromotions[0]['type'];
-  } else if(hasPromotions) {
-    promotionType = allPromotions[1]['type'];
+    promotionType = allPromotions[0]["type"];
+  } else if (hasPromotions) {
+    promotionType = allPromotions[1]["type"];
   }
   return [hasPromotions, promotionType];
 }
 
-function 
+function printEachFood(itemsToBePrinted) {
+  console.log("============= 订餐明细 =============");
+  itemsToBePrinted.forEach(eachFood => {
+    console.log(
+      `${eachFood.name} x ${eachFood.count} = ${eachFood.totalPrice}`
+    );
+  });
+}
+
+function printPromotion(hasPromotions, promotionType) {
+  if (!hasPromotions) {
+    return;
+  }
+  var allPromotions = loadPromotions();
+  if (promotionType === allPromotions[0]["type"]) {
+  } else if (promotionType === allPromotions[1]["type"]) {
+  }
+}
