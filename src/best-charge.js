@@ -4,8 +4,10 @@ function bestCharge(selectedItems) {
   var input = parseInput(selectedItems);
   var soldFoodItems = getSoldFood(input);
   var originalTotalPrice = getOriginalTotalPrice(soldFoodItems);
+  let [, , discountedPrice] = getPromotion(soldFoodItems, originalTotalPrice);
   printEachFood(soldFoodItems);
   printPromotion(getPromotion(soldFoodItems, originalTotalPrice));
+  printFinalPrice(originalTotalPrice, discountedPrice);
 }
 
 function parseInput(selectedItems) {
@@ -97,6 +99,12 @@ function printPromotion([
       `${promotionType}(${[...discountedNameSet]})，省${discountedPrice}元`
     );
   }
+}
+
+function printFinalPrice(originalTotalPrice, discountedPrice) {
+  console.log("-----------------------------------");
+  console.log(`总计：${originalTotalPrice - discountedPrice}元`);
+  console.log("===================================");
 }
 
 function loadAllItems() {
