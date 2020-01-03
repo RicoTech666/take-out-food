@@ -32,3 +32,28 @@ function getOriginalTotalPrice(itemsToBeSummed) {
   });
   return originalTotalPrice;
 }
+
+function getPromotion(itemsToBePromoted, originalTotalPrice) {
+  const promotionThreshold = 30;
+  var allPromotions = loadPromotions();
+  var hasPromotions = false;
+  var promotionType = '';
+  itemsToBePromoted.forEach(foodItem=>{
+    if(foodItem.id === allPromotions[1]['items'][0]){
+      itemsToBePromoted.forEach(foodItemInner=>{
+        if(foodItemInner.id === allPromotions[1]['items'][1]){
+          hasPromotions = true;
+        }
+      })
+    }
+  })
+  if (originalTotalPrice > promotionThreshold) {
+    hasPromotions = true;
+    promotionType = allPromotions[0]['type'];
+  } else if(hasPromotions) {
+    promotionType = allPromotions[1]['type'];
+  }
+  return [hasPromotions, promotionType];
+}
+
+function 
