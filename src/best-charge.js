@@ -1,7 +1,7 @@
 function bestCharge(selectedItems) {
-  var input = parseInput(selectedItems);
-  var soldFoodItems = getSoldFood(input);
-  var originalTotalPrice = getOriginalTotalPrice(soldFoodItems);
+  let input = parseInput(selectedItems);
+  let soldFoodItems = getSoldFood(input);
+  let originalTotalPrice = getOriginalTotalPrice(soldFoodItems);
   let [, , discountedPrice] = getPromotion(soldFoodItems, originalTotalPrice);
   return (
     printEachFood(soldFoodItems) +
@@ -19,10 +19,10 @@ function parseInput(selectedItems) {
 }
 
 function getSoldFood(inputMap) {
-  var allItems = loadAllItems();
-  var soldFoodItems = [];
+  let allItems = loadAllItems();
+  let soldFoodItems = [];
   for (let [keyBarcode, valueFoodCount] of inputMap.entries()) {
-    var foodItem = allItems.find(item => item.id === keyBarcode);
+    let foodItem = allItems.find(item => item.id === keyBarcode);
     foodItem["count"] = valueFoodCount;
     foodItem["totalPrice"] =
       parseInt(foodItem.count) * parseInt(foodItem.price);
@@ -32,7 +32,7 @@ function getSoldFood(inputMap) {
 }
 
 function getOriginalTotalPrice(itemsToBeSummed) {
-  var originalTotalPrice = 0;
+  let originalTotalPrice = 0;
   itemsToBeSummed.forEach(foodItem => {
     originalTotalPrice += foodItem.totalPrice;
   });
@@ -41,10 +41,10 @@ function getOriginalTotalPrice(itemsToBeSummed) {
 
 function getPromotion(itemsToBePromoted, originalTotalPrice) {
   const promotionThreshold = 30;
-  var allPromotions = loadPromotions();
-  var discountedPrice = 0;
-  var hasPromotions = false;
-  var promotionType = "";
+  let allPromotions = loadPromotions();
+  let discountedPrice = 0;
+  let hasPromotions = false;
+  let promotionType = "";
   let discountedNameSet = new Set();
   itemsToBePromoted.forEach(foodItem => {
     if (allPromotions[1]["items"].includes(foodItem.id)) {
@@ -70,7 +70,7 @@ function getPromotion(itemsToBePromoted, originalTotalPrice) {
 }
 
 function printEachFood(itemsToBePrinted) {
-  var printedContent = "============= 订餐明细 =============\n";
+  let printedContent = "============= 订餐明细 =============\n";
   itemsToBePrinted.forEach(eachFood => {
     printedContent += `${eachFood.name} x ${eachFood.count} = ${eachFood.totalPrice}元\n`;
   });
@@ -86,8 +86,8 @@ function printPromotion([
   if (!hasPromotions) {
     return '';
   }
-  var printedContent = `-----------------------------------\n使用优惠:\n`;
-  var allPromotions = loadPromotions();
+  let printedContent = `-----------------------------------\n使用优惠:\n`;
+  let allPromotions = loadPromotions();
 
   if (promotionType === allPromotions[0]["type"]) {
     printedContent += `${promotionType}，省${discountedPrice}元\n`;
