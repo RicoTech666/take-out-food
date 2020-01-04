@@ -1,13 +1,13 @@
-var input = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
-bestCharge(input);
 function bestCharge(selectedItems) {
   var input = parseInput(selectedItems);
   var soldFoodItems = getSoldFood(input);
   var originalTotalPrice = getOriginalTotalPrice(soldFoodItems);
   let [, , discountedPrice] = getPromotion(soldFoodItems, originalTotalPrice);
-  printEachFood(soldFoodItems);
-  printPromotion(getPromotion(soldFoodItems, originalTotalPrice));
-  printFinalPrice(originalTotalPrice, discountedPrice);
+  return (
+    printEachFood(soldFoodItems) +
+    printPromotion(getPromotion(soldFoodItems, originalTotalPrice)) +
+    printFinalPrice(originalTotalPrice, discountedPrice)
+  );
 }
 
 function parseInput(selectedItems) {
@@ -70,12 +70,11 @@ function getPromotion(itemsToBePromoted, originalTotalPrice) {
 }
 
 function printEachFood(itemsToBePrinted) {
-  console.log("============= 订餐明细 =============");
+  var printedContent = "============= 订餐明细 =============\n";
   itemsToBePrinted.forEach(eachFood => {
-    console.log(
-      `${eachFood.name} x ${eachFood.count} = ${eachFood.totalPrice}`
-    );
+    printedContent += `${eachFood.name} x ${eachFood.count} = ${eachFood.totalPrice}元\n`;
   });
+  return printedContent;
 }
 
 function printPromotion([
@@ -85,61 +84,23 @@ function printPromotion([
   discountedNameSet
 ]) {
   if (!hasPromotions) {
-    return;
+    return '';
   }
-
-  console.log("-----------------------------------");
-  console.log("使用优惠：");
+  var printedContent = `-----------------------------------\n使用优惠:\n`;
   var allPromotions = loadPromotions();
 
   if (promotionType === allPromotions[0]["type"]) {
-    console.log(`${promotionType}，省${discountedPrice}元`);
+    printedContent += `${promotionType}，省${discountedPrice}元\n`;
   } else if (promotionType === allPromotions[1]["type"]) {
-    console.log(
-      `${promotionType}(${[...discountedNameSet]})，省${discountedPrice}元`
-    );
+    printedContent += `${promotionType}(${`${[...discountedNameSet]}`.replace(
+      ",",
+      "，"
+    )})，省${discountedPrice}元\n`;
   }
+  return printedContent;
 }
 
 function printFinalPrice(originalTotalPrice, discountedPrice) {
-  console.log("-----------------------------------");
-  console.log(`总计：${originalTotalPrice - discountedPrice}元`);
-  console.log("===================================");
-}
-
-function loadAllItems() {
-  return [
-    {
-      id: "ITEM0001",
-      name: "黄焖鸡",
-      price: 18.0
-    },
-    {
-      id: "ITEM0013",
-      name: "肉夹馍",
-      price: 6.0
-    },
-    {
-      id: "ITEM0022",
-      name: "凉皮",
-      price: 8.0
-    },
-    {
-      id: "ITEM0030",
-      name: "冰锋",
-      price: 2.0
-    }
-  ];
-}
-
-function loadPromotions() {
-  return [
-    {
-      type: "满30减6元"
-    },
-    {
-      type: "指定菜品半价",
-      items: ["ITEM0001", "ITEM0022"]
-    }
-  ];
+  return `-----------------------------------\n总计：${originalTotalPrice -
+    discountedPrice}元\n===================================`;
 }
