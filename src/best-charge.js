@@ -87,7 +87,6 @@ function printPromotion([hasPromotions, promotionType, discountedPrice, discount
   }
   let printedContent = `-----------------------------------\n使用优惠:\n`;
   let allPromotions = loadPromotions();
-
   if (promotionType === allPromotions[0]["type"]) {
     printedContent += `${promotionType}，省${discountedPrice}元\n`;
   } else if (promotionType === allPromotions[1]["type"]) {
