@@ -24,8 +24,7 @@ function getSoldFood(inputMap) {
   for (let [keyBarcode, valueFoodCount] of inputMap.entries()) {
     let foodItem = allItems.find(item => item.id === keyBarcode);
     foodItem["count"] = valueFoodCount;
-    foodItem["totalPrice"] =
-      parseInt(foodItem.count) * parseInt(foodItem.price);
+    foodItem["totalPrice"] = parseInt(foodItem.count) * parseInt(foodItem.price);
     soldFoodItems.push(foodItem);
   }
   return soldFoodItems;
@@ -52,21 +51,26 @@ function getPromotion(itemsToBePromoted, originalTotalPrice) {
       discountedNameSet.add(foodItem.name);
     }
   });
-  if (discountedPrice > 6) {
-    promotionType = allPromotions[1]["type"];
-  } else if (discountedPrice < 6 && originalTotalPrice >= promotionThreshold) {
+  promotionType = getPromotionType(discountedPrice, originalTotalPrice);
+  if(discountedPrice < 6 && originalTotalPrice >= promotionThreshold) {
     discountedPrice = 6;
-    promotionType = allPromotions[0]["type"];
-  } else if (
-    6 === discountedPrice &&
-    originalTotalPrice >= promotionThreshold
-  ) {
-    promotionType = allPromotions[0]["type"];
   }
   if (discountedPrice > 0) {
     hasPromotions = true;
   }
   return [hasPromotions, promotionType, discountedPrice, discountedNameSet];
+}
+
+function getPromotionType(discountedPrice, originalTotalPrice) {
+  const promotionThreshold = 30;
+  let allPromotions = loadPromotions();
+  if (discountedPrice > 6) {
+    return allPromotions[1]["type"];
+  } else if (discountedPrice < 6 && originalTotalPrice >= promotionThreshold) {
+    return allPromotions[0]["type"];
+  } else if (6 === discountedPrice && originalTotalPrice >= promotionThreshold) {
+    return allPromotions[0]["type"];
+  }
 }
 
 function printEachFood(itemsToBePrinted) {
@@ -77,14 +81,9 @@ function printEachFood(itemsToBePrinted) {
   return printedContent;
 }
 
-function printPromotion([
-  hasPromotions,
-  promotionType,
-  discountedPrice,
-  discountedNameSet
-]) {
+function printPromotion([hasPromotions, promotionType, discountedPrice, discountedNameSet]) {
   if (!hasPromotions) {
-    return '';
+    return "";
   }
   let printedContent = `-----------------------------------\n使用优惠:\n`;
   let allPromotions = loadPromotions();
@@ -92,10 +91,7 @@ function printPromotion([
   if (promotionType === allPromotions[0]["type"]) {
     printedContent += `${promotionType}，省${discountedPrice}元\n`;
   } else if (promotionType === allPromotions[1]["type"]) {
-    printedContent += `${promotionType}(${`${[...discountedNameSet]}`.replace(
-      ",",
-      "，"
-    )})，省${discountedPrice}元\n`;
+    printedContent += `${promotionType}(${`${[...discountedNameSet]}`.replace(",", "，")})，省${discountedPrice}元\n`;
   }
   return printedContent;
 }
